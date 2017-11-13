@@ -576,6 +576,18 @@ public class CommandLineRunner extends
         handler = BooleanOptionHandler.class,
         usage = "Checks for type errors using the new type inference algorithm.")
     private boolean useNewTypeInference = false;
+    
+    @Option(name="--variable_renaming_input",
+        usage = "")
+    private String variableRenamingInput = null;
+        
+    @Option(name="--property_renaming_input",
+        usage = "")
+    private String propertyRanamingInput;
+
+    @Option(name = "--rename_prefix",
+        usage = "Specifies a prefix that will be prepended to all variables.")
+    private String renamePrefix = null;
 
     @Option(name = "--rename_prefix_namespace",
         usage = "Specifies the name of an object that will be used to store all "
@@ -1534,6 +1546,26 @@ public class CommandLineRunner extends
     options.setDartPass(flags.dartPass);
 
     options.setJ2clPass(flags.j2clPass);
+    
+    options.renamePrefix = flags.renamePrefix;
+    
+    if(flags.variableRenamingInput!=null &&!flags.variableRenamingInput.isEmpty()) {
+		try {
+			options.inputVariableMap =
+			VariableMap.load(flags.variableRenamingInput);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    if(flags.propertyRanamingInput!=null &&!flags.propertyRanamingInput.isEmpty()) {
+		try {
+			options.inputPropertyMap =
+			VariableMap.load(flags.propertyRanamingInput);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
     options.renamePrefixNamespace = flags.renamePrefixNamespace;
 

@@ -49,7 +49,7 @@ class CrossModuleMethodMotion implements CompilerPass {
 
   // Visible for testing
   static final String STUB_DECLARATIONS =
-      "var JSCompiler_stubMap = [];" +
+      "var JSCompiler_stubMap = {};" +
       "function JSCompiler_stubMethod(JSCompiler_stubMethod_id) {" +
       "  return function() {" +
       "    return JSCompiler_stubMap[JSCompiler_stubMethod_id].apply(" +
@@ -162,7 +162,7 @@ class CrossModuleMethodMotion implements CompilerPass {
 
           Node valueParent = value.getParent();
           Node proto = prop.getPrototype();
-          int stubId = idGenerator.newId();
+          int stubId = idGenerator.newId(nameInfo.name);
 
           if (!noStubFunctions) {
             // example: JSCompiler_stubMethod(id);
@@ -252,20 +252,21 @@ class CrossModuleMethodMotion implements CompilerPass {
      * Ids for cross-module method stubbing, so that each method has
      * a unique id.
      */
-    private int currentId = 0;
+    private int counter = 0;
 
     /**
      * Returns whether we've generated any new ids.
      */
     boolean hasGeneratedAnyIds() {
-      return currentId != 0;
+      return counter != 0;
     }
 
     /**
      * Creates a new id for stubbing a method.
      */
-    int newId() {
-      return currentId++;
-    }
+    int newId(String name) {
+    	counter++;
+        return name.hashCode();
+      }
   }
 }
