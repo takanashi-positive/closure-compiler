@@ -24,6 +24,7 @@ import com.google.javascript.rhino.Node;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 /**
@@ -162,7 +163,7 @@ class CrossModuleMethodMotion implements CompilerPass {
 
           Node valueParent = value.getParent();
           Node proto = prop.getPrototype();
-          int stubId = idGenerator.newId(nameInfo.name);
+          int stubId = idGenerator.newId(value);
 
           if (!noStubFunctions) {
             // example: JSCompiler_stubMethod(id);
@@ -247,10 +248,10 @@ class CrossModuleMethodMotion implements CompilerPass {
 
   static class IdGenerator implements Serializable {
     private static final long serialVersionUID = 0L;
+    private HashSet<Integer> idSet = new HashSet<Integer>();
 
     /**
-     * Ids for cross-module method stubbing, so that each method has
-     * a unique id.
+     * Ids for cross-module method stubbing, so that each method has a unique id.
      */
     private int counter = 0;
 
@@ -264,9 +265,17 @@ class CrossModuleMethodMotion implements CompilerPass {
     /**
      * Creates a new id for stubbing a method.
      */
-    int newId(String name) {
-    	counter++;
-        return name.hashCode();
+    int newId(Node functionNode) {
+      counter++;
+      // The first node is Name node.
+      Node nameNode = functionNode.getFirstChild();
+      String name = nameNode.getString() == null ? "" : nameNode.getString();
+      // When there's collision
+      while (idSet.contains(name.hashCode())) {
+        name += counter;
       }
+      idSet.add(name.hashCode());
+      return name.hashCode();
+    }
   }
 }
