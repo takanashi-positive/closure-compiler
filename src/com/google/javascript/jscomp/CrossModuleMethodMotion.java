@@ -44,6 +44,7 @@ class CrossModuleMethodMotion implements CompilerPass {
   private final AnalyzePrototypeProperties analyzer;
   private final JSModuleGraph moduleGraph;
   private final boolean noStubFunctions;
+  private final boolean useHashStubId;
 
   static final String STUB_METHOD_NAME = "JSCompiler_stubMethod";
   static final String UNSTUB_METHOD_NAME = "JSCompiler_unstubMethod";
@@ -73,13 +74,14 @@ class CrossModuleMethodMotion implements CompilerPass {
    *     stub functions in the parent module.
    */
   CrossModuleMethodMotion(AbstractCompiler compiler, IdGenerator idGenerator,
-      boolean canModifyExterns, boolean noStubFunctions) {
+      boolean canModifyExterns, boolean noStubFunctions, boolean useHashStubId) {
     this.compiler = compiler;
     this.idGenerator = idGenerator;
     this.moduleGraph = compiler.getModuleGraph();
     this.analyzer = new AnalyzePrototypeProperties(compiler, moduleGraph,
         canModifyExterns, false);
     this.noStubFunctions = noStubFunctions;
+    this.useHashStubId = useHashStubId;
   }
 
   @Override
@@ -163,7 +165,12 @@ class CrossModuleMethodMotion implements CompilerPass {
 
           Node valueParent = value.getParent();
           Node proto = prop.getPrototype();
-          int stubId = idGenerator.newId(value);
+          int stubId;
+          if(useHashStubId) {
+            stubId = idGenerator.newId(value);
+          }else {
+            stubId = idGenerator.newId();
+          }
 
           if (!noStubFunctions) {
             // example: JSCompiler_stubMethod(id);
@@ -276,6 +283,10 @@ class CrossModuleMethodMotion implements CompilerPass {
       }
       idSet.add(name.hashCode());
       return name.hashCode();
+    }
+    
+    int newId() {
+      return counter++;
     }
   }
 }

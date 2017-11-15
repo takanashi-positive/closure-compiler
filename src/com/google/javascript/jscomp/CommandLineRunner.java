@@ -585,6 +585,11 @@ public class CommandLineRunner extends
         usage = "")
     private String propertyRanamingInput;
 
+    @Option(name = "--use_hash_stub_id",
+        handler = BooleanOptionHandler.class,
+        usage = "Use hashcode of method name string as stubId for cross module method motion.")
+    private boolean useHashStubId = false;
+    
     @Option(name = "--rename_prefix",
         usage = "Specifies a prefix that will be prepended to all variables.")
     private String renamePrefix = null;
@@ -1548,6 +1553,8 @@ public class CommandLineRunner extends
     options.setJ2clPass(flags.j2clPass);
     
     options.renamePrefix = flags.renamePrefix;
+    
+    options.crossModuleCodeUseHashStubId = flags.useHashStubId;
     
     if(flags.variableRenamingInput!=null &&!flags.variableRenamingInput.isEmpty()) {
 		try {

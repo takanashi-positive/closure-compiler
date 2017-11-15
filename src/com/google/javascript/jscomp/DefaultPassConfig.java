@@ -2265,7 +2265,8 @@ public final class DefaultPassConfig extends PassConfig {
           // Only move properties in externs if we're not treating
           // them as exports.
           options.removeUnusedPrototypePropertiesInExterns,
-          options.crossModuleCodeMotionNoStubMethods);
+          options.crossModuleCodeMotionNoStubMethods,
+          options.crossModuleCodeUseHashStubId);
     }
   };
 

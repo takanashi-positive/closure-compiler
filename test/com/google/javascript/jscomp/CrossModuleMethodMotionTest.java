@@ -27,6 +27,7 @@ public final class CrossModuleMethodMotionTest extends CompilerTestCase {
 
   private boolean canMoveExterns = false;
   private boolean noStubs = false;
+  private boolean useHashStubId = false;
   private final String STUB_DECLARATIONS =
       CrossModuleMethodMotion.STUB_DECLARATIONS;
 
@@ -38,7 +39,7 @@ public final class CrossModuleMethodMotionTest extends CompilerTestCase {
   protected CompilerPass getProcessor(Compiler compiler) {
     return new CrossModuleMethodMotion(
         compiler, new CrossModuleMethodMotion.IdGenerator(), canMoveExterns,
-        noStubs);
+        noStubs, useHashStubId);
   }
 
   @Override

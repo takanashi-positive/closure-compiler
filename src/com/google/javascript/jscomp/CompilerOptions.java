@@ -359,6 +359,13 @@ public class CompilerOptions {
    * the parent module and moved to a later module.
    **/
   boolean crossModuleCodeMotionNoStubMethods;
+  
+  /**
+   * Use hashcode of method name string as stubId.
+   * 
+   * This option is to prevent unnecessary code change during js optimization.
+   */
+  boolean crossModuleCodeUseHashStubId;
 
   /**
    * Whether when module B depends on module A and module B declares a symbol,
@@ -2025,6 +2032,11 @@ public class CompilerOptions {
     this.crossModuleCodeMotionNoStubMethods = crossModuleCodeMotionNoStubMethods;
   }
 
+  public void setCrossModuleCodeUseHashStubId(boolean
+      crossModuleCodeUseHashStubId) {
+    this.crossModuleCodeUseHashStubId = crossModuleCodeUseHashStubId;
+  }
+  
   public void setParentModuleCanSeeSymbolsDeclaredInChildren(
       boolean parentModuleCanSeeSymbolsDeclaredInChildren) {
     this.parentModuleCanSeeSymbolsDeclaredInChildren =
@@ -2577,6 +2589,7 @@ public class CompilerOptions {
             .add("convertToDottedProperties", convertToDottedProperties)
             .add("crossModuleCodeMotion", crossModuleCodeMotion)
             .add("crossModuleCodeMotionNoStubMethods", crossModuleCodeMotionNoStubMethods)
+            .add("crossModuleCodeUseHashStubId", crossModuleCodeUseHashStubId)
             .add("crossModuleMethodMotion", crossModuleMethodMotion)
             .add("cssRenamingMap", cssRenamingMap)
             .add("cssRenamingWhitelist", cssRenamingWhitelist)
