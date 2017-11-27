@@ -844,6 +844,7 @@ class RemoveUnusedVars
         // Don't remove function arguments here. That's a special case
         // that's taken care of in removeUnreferencedFunctionArgs.
       } else if (NodeUtil.isFunctionExpression(toRemove)) {
+        toRemove.getFirstChild().setStringForStubId(toRemove.getFirstChild().getString());
         if (!preserveFunctionExpressionNames) {
           compiler.reportChangeToEnclosingScope(toRemove);
           toRemove.getFirstChild().setString("");

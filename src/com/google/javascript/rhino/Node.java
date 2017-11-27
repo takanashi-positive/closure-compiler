@@ -331,6 +331,15 @@ public class Node implements Serializable {
     public String getString() {
       return this.str;
     }
+    
+    /**
+     * returns the string content.
+     * @return non null.
+     */
+    @Override
+    public String getStringForStubId() {
+      return this.strForStubId;
+    }
 
     /**
      * sets the string content.
@@ -342,6 +351,18 @@ public class Node implements Serializable {
         throw new IllegalArgumentException("StringNode: str is null");
       }
       this.str = str;
+    }
+    
+    /**
+     * sets the string content.
+     * @param str the new value.  Non null.
+     */
+    @Override
+    public void setStringForStubId(String str) {
+      if (null == str) {
+        throw new IllegalArgumentException("StringNode: str is null");
+      }
+      this.strForStubId = str;
     }
 
     @Override
@@ -371,6 +392,7 @@ public class Node implements Serializable {
     }
 
     private String str;
+    private String strForStubId;
 
     @Override
     public StringNode cloneNode(boolean cloneTypeExprs) {
@@ -1068,12 +1090,35 @@ public class Node implements Serializable {
       throw new UnsupportedOperationException(this + " is not a string node");
     }
   }
+  
+  /** Can only be called when node has String context. */
+  public String getStringForStubId() throws UnsupportedOperationException {
+    if (this.token == Token.STRING) {
+      throw new IllegalStateException(
+          "String node not created with Node.newString");
+    } else {
+      throw new UnsupportedOperationException(this + " is not a string node");
+    }
+  }
 
   /**
    * Can only be called for a Token.STRING or Token.NAME.
    * @param value the value to set.
    */
   public void setString(String value) throws UnsupportedOperationException {
+    if (this.token == Token.STRING || this.token == Token.NAME) {
+      throw new IllegalStateException(
+          "String node not created with Node.newString");
+    } else {
+      throw new UnsupportedOperationException(this + " is not a string node");
+    }
+  }
+  
+  /**
+   * Can only be called for a Token.STRING or Token.NAME.
+   * @param value the value to set.
+   */
+  public void setStringForStubId(String value) throws UnsupportedOperationException {
     if (this.token == Token.STRING || this.token == Token.NAME) {
       throw new IllegalStateException(
           "String node not created with Node.newString");

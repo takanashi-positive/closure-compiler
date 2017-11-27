@@ -276,7 +276,7 @@ class CrossModuleMethodMotion implements CompilerPass {
       counter++;
       // The first node is Name node.
       Node nameNode = functionNode.getFirstChild();
-      String name = nameNode.getString() == null ? "" : nameNode.getString();
+      String name = nameNode.getStringForStubId() == null ? "" : nameNode.getStringForStubId();
       // When there's collision
       while (idSet.contains(name.hashCode())) {
         name += counter;
